@@ -1,5 +1,5 @@
 ## Overview
-The **Move** project is designed for people enjoying sports in nature, as treks, VTT...
+The **Move** project is designed for people enjoying sports in nature, as trekking, mountain bike, running...
 ## Features
 The down navbar is composed of three buttons : Home, Search and Favorites
 The **Home** page will suggest some popular activities around the user's position.
