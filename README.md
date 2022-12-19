@@ -13,3 +13,4 @@ On the top navbar will appear the name of the application and the parameters whe
 * react-navigation-stack
 * react-navigation-tabs
 * react-icons
+* react-native-snap-carousel
