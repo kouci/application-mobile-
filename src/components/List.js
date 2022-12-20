@@ -7,7 +7,7 @@ import ActivityItem from "./ActivityItem.js";
 
 
 
-const List = (props) => {
+const List = () => {
   const [activities, setActivities] = useState(null);
   const [orderActivity, setOrderActivity] = useState("name");
 
@@ -56,10 +56,10 @@ const {data, error} =  await supabase.storage.getBucket('photos');
 
   return (
     <View>
-      <View style = {props.style.header}>
+      <View style = {styles.header}>
         <View >
           <TouchableHighlight
-            style={props.style.btn}
+            style={styles.btn}
             onPress={handleDifficulte}
           >
             <Text style={{color: "white", fontWeight: "bold"}}>Difficulté</Text>
@@ -67,7 +67,7 @@ const {data, error} =  await supabase.storage.getBucket('photos');
         </View>
         <View >
           <TouchableHighlight
-            style={props.style.btn}
+            style={styles.btn}
             onPress={handleDuree}
           >
             <Text style={{color: "white", fontWeight: "bold"}}>Durée</Text>
@@ -75,7 +75,7 @@ const {data, error} =  await supabase.storage.getBucket('photos');
         </View>
         <View>
           <TouchableHighlight
-            style={props.style.btn}
+            style={styles.btn}
             onPress={handleAlpha}
           >
             <Text style={{color: "white", fontWeight: "bold"}}>Alphabetique</Text>
@@ -111,5 +111,19 @@ const styles = StyleSheet.create({
   },
   desc: {
     fontSize:16,
+  },
+  btn:{
+    backgroundColor: '#005b96',
+    color: "#fff",
+    borderRadius: 8,
+    height : 40,
+    width : 120,
+    margin : 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  header : {
+    marginTop : 50,
+    flexDirection : "row"
   }
 });

@@ -4,19 +4,22 @@ import supabase from "./src/config/SupabaseClient.js";
 import List from './src/components/List.js'
 import React from 'react';
 import ProfilCreation from "./src/components/ProfilCreate.js";
+import { NavigationContainer } from "@react-navigation/native";
+import MyTabs from "./src/components/MyTabs.js";
 
 
 export default function App() {
 
   //const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
   //console.log(supabase);
+  
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <ProfilCreation />
-    </View>
+    <NavigationContainer>
+      <MyTabs />
+    </NavigationContainer>
   );
 }
+
 //<List style = {styles}/>
 const styles = StyleSheet.create({
   container: {
