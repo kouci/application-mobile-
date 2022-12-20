@@ -12,6 +12,7 @@ import {
 
 import supabase from "../../src/config/SupabaseClient.js";
 import ActivityItem from "./ActivityItem.js";
+import Form from "./Form.js";
 
 const ProfilCreation = () => {
   const [email, setEmail] = useState(null);
@@ -35,18 +36,7 @@ const ProfilCreation = () => {
 
   return (
     <View style={styles.form}>
-      <Text style={styles.titel}>Connection</Text>
-      <TextInput style={styles.input} value={email} onChangeText={setEmail} />
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-      />
-      <View>
-        <TouchableHighlight style={styles.btn} onPress={handleSubmit}>
-          <Text style={{ color: "white", fontWeight: "bold" }}>Connection</Text>
-        </TouchableHighlight>
-      </View>
+      <Form title="Inscription" handleSubmit={handleSubmit} email={email} setEmail={setEmail} password={password} setPassword={setPassword}/>
     </View>
   );
 };
@@ -57,28 +47,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  input: {
-    height: 40,
-    width: 300,
-    margin: 12,
-    borderWidth: 1,
-    padding: 5,
-    borderRadius: 10,
-  },
-  titel: {
-   fontSize: 35,
-   fontWeight : "bold"
-  },
-  btn: {
-    backgroundColor: "#005b96",
-    color: "#fff",
-    borderRadius: 8,
-    height: 40,
-    width: 300,
-    margin: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+ 
 });
 
 export default ProfilCreation;
