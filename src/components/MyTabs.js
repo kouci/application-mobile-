@@ -10,12 +10,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
    const Tab = createBottomTabNavigator();
   return (
    <Tab.Navigator>
-   <Tab.Screen name="creation" component={ProfilCreation}     options={{
+   <Tab.Screen name="S'inscrire" component={ProfilCreation}     options={{
       tabBarIcon: ({ color, size }) => (
         <Ionicons name="create" color={color} size={size} />
       ),
     }}/>
-   <Tab.Screen name="List" component={List} 
+   <Tab.Screen name="Liste des activités" component={List} 
        options={{
         tabBarIcon: ({ color, size }) => (
           <Ionicons name="list" color={color} size={size} />
