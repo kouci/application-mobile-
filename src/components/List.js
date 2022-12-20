@@ -1,24 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableHighlight, FlatList } from 'react-native';
+
 import supabase from "../../src/config/SupabaseClient.js";
+import ActivityItem from "./ActivityItem.js";
 
 
 const List = (props) => {
   const [activities, setActivities] = useState(null);
+  const [orderActivity, setOrderActivity] = useState("name");
 
   const handleDifficulte = () =>{
-      console.log("difficulte");
+      setOrderActivity("difficulte");
   }
   const handleAlpha = ()=>{
-      console.log("alpha");
+    setOrderActivity("name");
   }
   const handleDuree = () => {
-      console.log("duree");
+      setOrderActivity("duree");
   }
+
+  const renderAct = ({item}) => (
+    <ActivityItem item={item}/>
+  )
+
+
   const getActivities = async () => {
     try {
-      const { data, error } = await supabase.from("Activity").select();
+      const { data, error } = await supabase.from("Activity").select().order(orderActivity);
       console.log(data);
       if (data) {
         setActivities(data);
@@ -30,7 +39,7 @@ const List = (props) => {
   useEffect(() => {
     getActivities();
     console.log(activities);
-  }, []);
+  }, [orderActivity]);
 
   return (
     <View>
@@ -40,7 +49,7 @@ const List = (props) => {
             style={props.style.btn}
             onPress={handleDifficulte}
           >
-            <Text>Difficulté</Text>
+            <Text style={{color: "white", fontWeight: "bold"}}>Difficulté</Text>
           </TouchableHighlight>
         </View>
         <View >
@@ -48,7 +57,7 @@ const List = (props) => {
             style={props.style.btn}
             onPress={handleDuree}
           >
-            <Text>Durée</Text>
+            <Text style={{color: "white", fontWeight: "bold"}}>Durée</Text>
           </TouchableHighlight>
         </View>
         <View>
@@ -56,12 +65,38 @@ const List = (props) => {
             style={props.style.btn}
             onPress={handleAlpha}
           >
-            <Text>Alphabetique</Text>
+            <Text style={{color: "white", fontWeight: "bold"}}>Alphabetique</Text>
           </TouchableHighlight>
         </View>
+        
       </View>
+      <FlatList data={activities} renderItem={renderAct}></FlatList>
     </View>
   );
 };
 
 export default List;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  activityItem : {
+    backgroundColor: "#D9E3E9",
+    marginBottom: 10,
+    borderRadius: 5,
+    padding: 10,
+    marginHorizontal: 7,
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color:"#32749C"
+  },
+  desc: {
+    fontSize:16,
+  }
+});
