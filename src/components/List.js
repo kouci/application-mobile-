@@ -19,7 +19,6 @@ const List = (props) => {
 
   const getImages = async () => {
     try {
-      console.log("ddd");
       const { data, error } = await supabase.storage.getBucket("photos");
       console.log(data);
     } catch (error) {
