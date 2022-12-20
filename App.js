@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import supabase from "./src/config/SupabaseClient.js";
 import List from './src/components/List.js'
 import React from 'react';
+import ProfilCreation from "./src/components/ProfilCreate.js";
 
 
 export default function App() {
@@ -12,11 +13,11 @@ export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <List style = {styles}/>
+      <ProfilCreation />
     </View>
   );
 }
-
+//<List style = {styles}/>
 const styles = StyleSheet.create({
   container: {
     flex: 1,
