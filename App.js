@@ -11,9 +11,8 @@ export default function App() {
   //console.log(supabase);
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
-      <List />
+      <List style = {styles}/>
     </View>
   );
 }
@@ -21,8 +20,21 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center'
   },
+  btn:{
+    backgroundColor: '#005b96',
+    borderRadius: 8,
+    height : 40,
+    width : 120,
+    margin : 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  header : {
+    marginTop : 50,
+    flexDirection : "row"
+  }
 });
+
