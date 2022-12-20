@@ -6,11 +6,21 @@ import supabase from "../../src/config/SupabaseClient.js";
 import ActivityItem from "./ActivityItem.js";
 
 
+
 const List = (props) => {
   const [activities, setActivities] = useState(null);
   const [orderActivity, setOrderActivity] = useState("name");
 
- 
+  const getImages = async () => {
+    try {
+const {data, error} =  await supabase.storage.getBucket('photos');
+      if (data) {
+        console.log(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const handleDifficulte = () =>{
       setOrderActivity("difficulte");
@@ -30,7 +40,7 @@ const List = (props) => {
   const getActivities = async () => {
     try {
       const { data, error } = await supabase.from("Activity").select().order(orderActivity);
-      console.log(data);
+      //console.log(data);
       if (data) {
         setActivities(data);
       }
@@ -40,6 +50,8 @@ const List = (props) => {
   };
   useEffect(() => {
     getActivities();
+    //console.log(activities);
+    getImages();
   }, [orderActivity]);
 
   return (
