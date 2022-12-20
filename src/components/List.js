@@ -1,16 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button, TouchableHighlight, FlatList } from 'react-native';
+
 import supabase from "../../src/config/SupabaseClient.js";
 import ActivityItem from "./ActivityItem.js";
 
-const List = () => {
+
+const List = (props) => {
   const [activities, setActivities] = useState(null);
-  //console.log(supabase);
+  const [orderActivity, setOrderActivity] = useState("name");
+
+  const handleDifficulte = () =>{
+      setOrderActivity("difficulte");
+  }
+  const handleAlpha = ()=>{
+    setOrderActivity("name");
+  }
+  const handleDuree = () => {
+      setOrderActivity("duree");
+  }
+
+  const renderAct = ({item}) => (
+    <ActivityItem item={item}/>
+  )
+
 
   const getActivities = async () => {
     try {
-      const { data, error } = await supabase.from("Activity").select();
+      const { data, error } = await supabase.from("Activity").select().order(orderActivity);
       console.log(data);
       if (data) {
         setActivities(data);
@@ -19,20 +36,40 @@ const List = () => {
       console.error(error);
     }
   };
-
-  const renderAct = ({item}) => (
-    <ActivityItem item={item}/>
-  )
-
-  
- 
-
   useEffect(() => {
     getActivities();
-  }, []);
+    console.log(activities);
+  }, [orderActivity]);
 
   return (
-    <View style={styles.container}>
+    <View>
+      <View style = {props.style.header}>
+        <View >
+          <TouchableHighlight
+            style={props.style.btn}
+            onPress={handleDifficulte}
+          >
+            <Text style={{color: "white", fontWeight: "bold"}}>Difficulté</Text>
+          </TouchableHighlight>
+        </View>
+        <View >
+          <TouchableHighlight
+            style={props.style.btn}
+            onPress={handleDuree}
+          >
+            <Text style={{color: "white", fontWeight: "bold"}}>Durée</Text>
+          </TouchableHighlight>
+        </View>
+        <View>
+          <TouchableHighlight
+            style={props.style.btn}
+            onPress={handleAlpha}
+          >
+            <Text style={{color: "white", fontWeight: "bold"}}>Alphabetique</Text>
+          </TouchableHighlight>
+        </View>
+        
+      </View>
       <FlatList data={activities} renderItem={renderAct}></FlatList>
     </View>
   );
