@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginHorizontal: 40,
   },
   btn:{
     backgroundColor: '#005b96',
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
   },
   header : {
     marginTop : 50,
-    flexDirection : "row"
+    flexDirection : "row",
   }
 });
 

@@ -10,6 +10,8 @@ const List = (props) => {
   const [activities, setActivities] = useState(null);
   const [orderActivity, setOrderActivity] = useState("name");
 
+ 
+
   const handleDifficulte = () =>{
       setOrderActivity("difficulte");
   }
@@ -38,7 +40,6 @@ const List = (props) => {
   };
   useEffect(() => {
     getActivities();
-    console.log(activities);
   }, [orderActivity]);
 
   return (
@@ -83,6 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+
   },
   activityItem : {
     backgroundColor: "#D9E3E9",
