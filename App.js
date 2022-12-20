@@ -7,7 +7,6 @@ import ProfilCreation from "./src/components/ProfilCreate.js";
 import { NavigationContainer } from "@react-navigation/native";
 import MyTabs from "./src/components/MyTabs.js";
 
-
 export default function App() {
 
   //const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
