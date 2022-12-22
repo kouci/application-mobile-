@@ -41,9 +41,9 @@ input: {
    borderRadius: 10,
  },
  titel: {
-  fontSize: 35,
+  fontSize: 37,
   fontWeight : "bold",
-  textAlign: 'center'
+  textAlign: 'center',
  },
  btn: {
    backgroundColor: "#005b96",

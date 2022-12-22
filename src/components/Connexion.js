@@ -13,7 +13,11 @@ import {
   import supabase from "../../src/config/SupabaseClient.js";
   import ActivityItem from "./ActivityItem.js";
   import Form from "./Form.js";
-  
+  /**
+   * TODO : Gerer les champs : mettre au bon format les input text 
+   * TODO : Ajouter un lien entre les composants Connexions et inscription
+   * ![A FAIRE] : ajouter les informations de l'utilisateur dans la session
+   */
 const Connexion = () => {
     //* [STATE]
     const [email, setEmail] = useState(null);
