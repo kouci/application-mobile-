@@ -10,19 +10,20 @@ import {
     TextInput,
   } from "react-native";
   import { useNavigation } from '@react-navigation/native';
-  import supabase from "../../src/config/SupabaseClient.js";
-  import ActivityItem from "./ActivityItem.js";
-  import Form from "./Form.js";
+  import supabase from "../config/SupabaseClient.js";
+  import ActivityItem from "../components/ActivityItem.js";
+  import Form from "../components/Form.js";
   import Header from "../components/Header.js";
-  import ProfilScreen from "../screens/ProfilScreen"
+  import ProfilScreen from "./ProfilScreen"
+import Footer from "../components/Footer.js";
   /**
    * TODO : Gerer les champs : mettre au bon format les input text 
    * TODO : Ajouter un lien entre les composants Connexions et inscription
    * ![A FAIRE] : ajouter les informations de l'utilisateur dans la session
    */
-const Connexion = () => {
-  const navigation = useNavigation();
+const Connexion = ({navigation}) => {
 
+  console.log(navigation);
     //* [STATE]
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
@@ -31,7 +32,7 @@ const Connexion = () => {
     //* [METHODS]
 
     const handleSubmit = async () =>{
-        console.log('uhdiuse');
+        console.log('ff');
         const { data, error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password,
@@ -39,8 +40,9 @@ const Connexion = () => {
         
           //console.log(JSON.stringify(data));
           if(data.user != null){
+            //*si il est connecté
             storeData(data);
-            navigation.navigate(ProfilScreen);
+            navigation.navigate("Home");
           }
           else{
 
@@ -62,6 +64,7 @@ const Connexion = () => {
           <View style={styles.form}>
             <Form title="Connexion" handleSubmit={handleSubmit} email={email} setEmail={setEmail} password={password} setPassword={setPassword}/>
             </View>
+            <Footer navigation={navigation}/>
        </View>
     );
 };
