@@ -13,7 +13,7 @@ const MyTabs = () => {
 
   function HomeStackScreen() {
     return (
-      <HomeStack.Navigator initialRouteName="Settings">
+      <HomeStack.Navigator initialRouteName="HomeStack">
         <HomeStack.Screen
           name="HomeStack"
           component={ActivitiesScreen}
