@@ -13,21 +13,23 @@ const MyTabs = () => {
 
   function HomeStackScreen() {
     return (
-      <HomeStack.Navigator initialRouteName="Settings">
+      <HomeStack.Navigator initialRouteName="HomeStack">
         <HomeStack.Screen
           name="HomeStack"
           component={ActivitiesScreen}
           options={{ headerShown: false }}
         />
-        <HomeStack.Screen name="Settings" component={SettingsScreen} />
+        <HomeStack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
       </HomeStack.Navigator>
     );
   }
 
   const Tab = createBottomTabNavigator();
+  
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+      
         tabBarIcon: (focused, color, size) => {
           let iconName;
           if (route.name === "Home") {
@@ -46,7 +48,6 @@ const MyTabs = () => {
         name="Home"
         component={HomeStackScreen}
         options={{ headerShown: false }}
-        initialParams={{ id: 0 }}
       />
       <Tab.Screen
         name="Search"

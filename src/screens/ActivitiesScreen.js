@@ -5,6 +5,7 @@ import {
   Text,
   View,
   Button,
+  Dimensions,
   TouchableHighlight,
   FlatList,
 } from "react-native";
@@ -12,31 +13,18 @@ import {
 import supabase from "../../src/config/SupabaseClient.js";
 import ActivityItem from "../components/ActivityItem.js";
 import Header from "../components/Header.js";
+import Footer from "../components/Footer.js";
+import Carousel from 'react-native-snap-carousel';
 
 function ActivitiesScreen({ navigation }) {
   const [activities, setActivities] = useState(null);
+  const [activityName,setActivitiesName] = useState();
   const [orderActivity, setOrderActivity] = useState("name");
 
   
-  const getImages = async () => {
-    try {
-      const { data, error } = await supabase.storage.getBucket("photos");
-      if (data) {
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+   const SLIDER_WIDTH = Dimensions.get('window').width + 80
+ const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 
-  const handleDifficulte = () => {
-    setOrderActivity("difficulte");
-  };
-  const handleAlpha = () => {
-    setOrderActivity("name");
-  };
-  const handleDuree = () => {
-    setOrderActivity("duree");
-  };
 
   const renderAct = ({ item }) => <ActivityItem item={item} />;
 
@@ -56,38 +44,40 @@ function ActivitiesScreen({ navigation }) {
   };
   useEffect(() => {
     getActivities();
-    //console.log(activities);
-    getImages();
-  }, [orderActivity]);
+    //console.log(activities)
+  }, []);
 
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
-      <View style={styles.header}>
-        <View>
-          <TouchableHighlight style={styles.btn} onPress={handleDifficulte}>
-            <Text style={{ color: "white", fontWeight: "bold" }}>
-              Difficulté
-            </Text>
-          </TouchableHighlight>
-        </View>
-        <View>
-          <TouchableHighlight style={styles.btn} onPress={handleDuree}>
-            <Text style={{ color: "white", fontWeight: "bold" }}>Durée</Text>
-          </TouchableHighlight>
-        </View>
-        <View>
-          <TouchableHighlight style={styles.btn} onPress={handleAlpha}>
-            <Text style={{ color: "white", fontWeight: "bold" }}>
-              Alphabetique
-            </Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-      <FlatList data={activities} renderItem={renderAct}></FlatList>
+      <Carousel
+
+              data={activities}
+              renderItem={renderAct}
+              sliderWidth={SLIDER_WIDTH}
+              itemWidth={ITEM_WIDTH}
+              useScrollView={true}  
+              
+              
+            />
+
+      <Footer navigation={navigation} />
     </View>
   );
 }
+
+/*
+ return (
+            <Carousel
+              ref={(c) => { this._carousel = c; }}
+              data={activities}
+              renderItem={renderAct}
+              sliderWidth={sliderWidth}
+              itemWidth={itemWidth}
+            />
+        );
+*/
+
 
 export default ActivitiesScreen;
 

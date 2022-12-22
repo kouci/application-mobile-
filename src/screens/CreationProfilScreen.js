@@ -13,10 +13,11 @@ import {
 import supabase from "../../src/config/SupabaseClient.js";
 import Form from "../components/Form.js";
 import Header from "../components/Header.js";
+import Footer from "../components/Footer.js";
 
 
 
-const CreationProfilScreen = () => {
+const CreationProfilScreen = ({ navigation }) => {
    const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [loading, setLoading] = useState(false)
@@ -41,6 +42,7 @@ const CreationProfilScreen = () => {
     <View style={styles.form}>
       <Form title="Inscription" handleSubmit={handleSubmit} email={email} setEmail={setEmail} password={password} setPassword={setPassword}/>
     </View>
+    <Footer navigation={navigation}/>
     </View>
   
   );
