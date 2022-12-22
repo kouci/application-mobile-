@@ -1,11 +1,15 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableHighlight, Button } from 'react-native'
+import supabase from "../../src/config/SupabaseClient.js";
+
 
 const ActivityItem = ({item}) => {
+  
   return (
    <View  style={styles.activityItem}>
           <Text style={styles.title}>{item.name}</Text>
           <Text>{item.description}</Text>
+         
     </View>
   )
 }

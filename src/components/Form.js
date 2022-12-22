@@ -10,7 +10,7 @@ import {
  } from "react-native";
 
 
-const Form = ({title,HandleSubmit,email,setEmail,password,setPassword}) => {
+const Form = ({title,handleSubmit,email,setEmail,password,setPassword}) => {
   return (
  
        <View style={styles.form}>
@@ -22,7 +22,7 @@ const Form = ({title,HandleSubmit,email,setEmail,password,setPassword}) => {
         onChangeText={setPassword}
       />
       <View>
-        <TouchableHighlight style={styles.btn} onPress={HandleSubmit}>
+        <TouchableHighlight style={styles.btn} onPress={handleSubmit}>
           <Text style={{ color: "white", fontWeight: "bold" }}>Connection</Text>
         </TouchableHighlight>
       </View>

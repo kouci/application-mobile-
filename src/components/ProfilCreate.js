@@ -25,9 +25,10 @@ const ProfilCreation = () => {
       email: email,
       password: password,
     })
+    console.log(data);
     setLoading(false)
     setEmail(null)
-    setEPassword(null)
+    setPassword(null)
   };
 
   /*
