@@ -23,7 +23,7 @@ const Form = ({title,handleSubmit,email,setEmail,password,setPassword}) => {
       />
       <View>
         <TouchableHighlight style={styles.btn} onPress={handleSubmit}>
-          <Text style={{ color: "white", fontWeight: "bold" }}>Connection</Text>
+          <Text style={{ color: "white", fontWeight: "bold" }}>Connexion</Text>
         </TouchableHighlight>
       </View>
     </View>

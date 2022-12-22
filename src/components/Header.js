@@ -4,7 +4,7 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const Header = ({ navigation }) => {
-  console.log(JSON.stringify(navigation));
+  //console.log(JSON.stringify(navigation));
 
   return (
     <View style={styles.container}>

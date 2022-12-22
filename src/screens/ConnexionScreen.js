@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     StyleSheet,
     Text,
@@ -9,16 +9,20 @@ import {
     FlatList,
     TextInput,
   } from "react-native";
-  
+  import { useNavigation } from '@react-navigation/native';
   import supabase from "../../src/config/SupabaseClient.js";
   import ActivityItem from "./ActivityItem.js";
   import Form from "./Form.js";
+  import Header from "../components/Header.js";
+  import ProfilScreen from "../screens/ProfilScreen"
   /**
    * TODO : Gerer les champs : mettre au bon format les input text 
    * TODO : Ajouter un lien entre les composants Connexions et inscription
    * ![A FAIRE] : ajouter les informations de l'utilisateur dans la session
    */
 const Connexion = () => {
+  const navigation = useNavigation();
+
     //* [STATE]
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
@@ -32,14 +36,32 @@ const Connexion = () => {
             email: email,
             password: password,
           })
+        
+          //console.log(JSON.stringify(data));
+          if(data.user != null){
+            storeData(data);
+            navigation.navigate(ProfilScreen);
+          }
+          else{
 
-          console.log(JSON.stringify(data));
-          const { dataS, errorS } = await supabase.auth.getSession()
-          console.log(errorS);
+          }
+          
+    }
+
+    const storeData = async (value) => {
+      try {
+        const jsonValue = JSON.stringify(value)
+        await AsyncStorage.setItem('@user', jsonValue)
+      } catch (e) {
+        // saving error
+      }
     }
     return (
-        <View style={styles.form}>
+        <View style={styles.container}>
+          <Header />
+          <View style={styles.form}>
             <Form title="Connexion" handleSubmit={handleSubmit} email={email} setEmail={setEmail} password={password} setPassword={setPassword}/>
+            </View>
        </View>
     );
 };
@@ -47,6 +69,12 @@ const Connexion = () => {
 
 //* [STYLES]
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+  },
     form: {
       flex: 1,
       alignItems: "center",

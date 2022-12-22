@@ -29,7 +29,7 @@ const CreationProfilScreen = () => {
     })
     setLoading(false)
     setEmail(null)
-    setEPassword(null)
+    setPassword(null)
   };
 
   

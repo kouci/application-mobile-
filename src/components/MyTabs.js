@@ -7,6 +7,7 @@ import SearchScreen from "../screens/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SettingsScreen from "../screens/SettingsScreen";
+import Connexion from "../screens/ConnexionScreen";
 
 const MyTabs = () => {
   const HomeStack = createNativeStackNavigator();
@@ -55,7 +56,7 @@ const MyTabs = () => {
       />
       <Tab.Screen
         name="Creation"
-        component={CreationProfilScreen}
+        component={Connexion}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>
