@@ -2,23 +2,32 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from "@expo/vector-icons/Ionicons";
+import supabase from "../config/SupabaseClient";
 const Footer = ({ navigation }) => {
-  const [userAuth, setUserAuth] = useState(null);
+  const [userAuth, setUserAuth] = useState(supabase.auth.user());
   const getData = async () => {
     try {
-      const value = await AsyncStorage.getItem("@user");
+      const value = supabase.auth.user();
+      //console.log(value);
       if (value !== null) {
         setUserAuth(value);
+        console.log(value);
         console.log("user :");
-        console.log(userAuth);
+        //console.log(userAuth);
+      }
+      else{
+        console.log('errrrr');
       }
     } catch (e) {
       console.error(e);
     }
   };
   const handleProfile = () => {
-    console.log("nav");
-    getData();
+    //console.log(us);
+    //getData();
+    //console.log(supabase.auth.session());
+    //console.log('-------------');
+    console.log(userAuth);
     if (userAuth != null) {
       navigation.navigate("Profil");
     } else {

@@ -15,7 +15,7 @@ const stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <stack.Navigator>
+      <stack.Navigator screenOptions={{ animation: 'none' }}>
         <stack.Screen name="Home" component={ActivitiesScreen} options={{ headerShown: false }}/>
         <stack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }}/>
         <stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }}/>

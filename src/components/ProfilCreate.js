@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
   FlatList,
   TextInput,
+  Keyboard
 } from "react-native";
 
 import supabase from "../../src/config/SupabaseClient.js";
@@ -20,12 +21,13 @@ const ProfilCreation = () => {
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async () => {
+    Keyboard.dismiss()
    setLoading(true);
    const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
     })
-    console.log(data);
+    //console.log(data);
     setLoading(false)
     setEmail(null)
     setPassword(null)
