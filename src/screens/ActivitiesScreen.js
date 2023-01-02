@@ -47,9 +47,22 @@ function ActivitiesScreen({ navigation }) {
     //console.log(activities)
   }, []);
 
-  return (
+ /*
+ const [hour, setHour] = useState(0);
+
+  const incrementHour = () => {
+    setHour(hour + 1);
+  };
+
+    <Button title="Incrémenter l'heure" onPress={incrementHour} />
+      <Text>{Math.floor(hour / 60)}h {hour % 60}min</Text>
+ 
+ 
+ */ 
+   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
+      
       <Carousel
 
               data={activities}
@@ -60,6 +73,7 @@ function ActivitiesScreen({ navigation }) {
               
               
             />
+
 
       <Footer navigation={navigation} />
     </View>
