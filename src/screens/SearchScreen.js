@@ -4,8 +4,6 @@ import {
   Text,
   View,
   TouchableHighlight,
-  FlatList,
-  TextInput,
   ScrollView,
   Dimensions,
   SafeAreaView,
@@ -15,24 +13,33 @@ import supabase from "../../src/config/SupabaseClient.js";
 import ActivityItem from "../components/ActivityItem.js";
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
-import Checkbox from "expo-checkbox";
+import DropDownPicker from "react-native-dropdown-picker";
+
 
 const SearchScreen = ({ navigation }) => {
-  //states
 
+  //states
   const [activities, setActivities] = useState(null);
-  const [orderActivity, setOrderActivity] = useState("name");
-  const [checked, setChecked] = React.useState(false);
-  const [activity, setActivity] = useState("Choisissez une activity");
-  const [adresse, setAdresse] = useState("Localisation");
-  const [hourValue,setHourValue] = useState(0)
-  const [distanceValue,setDistanceValue] = useState(0)
+  const [orderActivity, setOrderActivity] = useState("");
+ 
+  const [hourValue, setHourValue] = useState(0);
+  const [distanceValue, setDistanceValue] = useState(0);
   const [hour, setHour] = useState(0);
   const [distance, setDistance] = useState(0);
 
-  const screenWidth = Dimensions.get("window").width;
+  /* valeur local pour dropList activité et localisation open s'active quand la droplist s'ouvre/ */
+  const [openLo, setOpenLo] = useState(false)
+  const [localisation,setLocalisation] = useState(null);
+  const [openAc, setOpenAc] = useState(false);
+  const [activity, setActivity] = useState(false);
+  // donnée pour tester
+  const [items, setItems] = useState([
+    { label: "Randonné", value: "Randonné" },
+    { label: "Vélo VTT", value: "vélo VTT" },
+  ]);
 
-  
+  const countries = ["Egypt", "Canada", "Australia", "Ireland"];
+  const screenWidth = Dimensions.get("window").width;
 
   const getImages = async () => {
     try {
@@ -44,24 +51,22 @@ const SearchScreen = ({ navigation }) => {
     }
   };
 
-  const handleDifficulte = () => {
-    setOrderActivity("difficulte");
+  const handleFacile = () => {
+    setOrderActivity("facile");
   };
-  const handleAlpha = () => {
-    setOrderActivity("name");
+  const handleMoyen = () => {
+    setOrderActivity("moyen");
   };
-  const handleDuree = () => {
-    setOrderActivity("duree");
+  const handleDifficile = () => {
+    setOrderActivity("difficile");
   };
 
   const renderAct = ({ item }) => <ActivityItem item={item} />;
-
+  //.order(orderActivity);
   const getActivities = async () => {
     try {
-      const { data, error } = await supabase
-        .from("Activity")
-        .select()
-        .order(orderActivity);
+      const { data, error } = await supabase.from("Activity").select();
+
       //console.log(data);
       if (data) {
         setActivities(data);
@@ -71,42 +76,59 @@ const SearchScreen = ({ navigation }) => {
     }
   };
 
-  
-
-  // Les useEffects 
+  // Les useEffects
   useEffect(() => {
     getActivities();
     //console.log(activities);
     getImages();
   }, [orderActivity]);
 
-  // useEffect pour le slidbar de la distance 
- useEffect(() => {
-    console.log("la valeu de la distance"+distance) 
-  },[distance]);
+  // useEffect pour le slidbar de la distance
+  useEffect(() => {
+    console.log("la valeu de la distance" + distance);
+  }, [distance]);
 
-   // useEffect pour le slidbar de la durée
- useEffect(() => {
-  console.log("la valeu de heure"+hour) 
-},[hour]);
+  // useEffect pour le slidbar de la durée
+  useEffect(() => {
+    console.log("la valeu de heure" + hour);
+  }, [hour]);
+
 
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
 
-      <ScrollView>
+      <ScrollView nestedScrollEnabled={true}>
         <SafeAreaView horizontal={false}>
-          <View style={styles.container}>
-            <TextInput
-              style={[styles.input, { width: screenWidth - 30 }]}
-              value={adresse}
-              onChangeText={setAdresse}
-            />
-            <TextInput
-              style={[styles.input, { width: screenWidth - 30 }]}
+          <View style={styles.container}>  
+          <View style={{ width: screenWidth - 30, zIndex: 5, marginBottom: 10 }}>
+              <DropDownPicker
+                open={openLo}
+                value={localisation}
+                items={items}
+                searchable
+                setOpen={setOpenLo}
+                setValue={setLocalisation}
+                setItems={setItems}
+                placeholder="Localisation"
+              />
+            </View>
+            {!openLo &&
+            <View style={{ width: screenWidth - 30, zIndex: 5  }}>
+            <DropDownPicker
+              open={openAc}
               value={activity}
-              onChangeText={setActivity}
+              items={items}
+              searchable
+              setOpen={setOpenAc}
+              setValue={setActivity}
+              setItems={setItems}
+              placeholder="Activity"
             />
+          </View>
+            }
+            
+     
             <View
               style={{
                 position: "relative",
@@ -139,18 +161,18 @@ const SearchScreen = ({ navigation }) => {
                   {Math.floor(hourValue / 60)} h {hourValue % 60}min
                 </Text>
               )}
-              {hourValue !== 0 && hourValue < 60 &&
-                 <Text
-                 style={{
-                   postion: "absolute",
-                   right: 60,
-                   top: -15,
-                   color: "gray",
-                 }}
-               >
-                 {hourValue % 60}min
-               </Text>
-              }
+              {hourValue !== 0 && hourValue < 60 && (
+                <Text
+                  style={{
+                    postion: "absolute",
+                    right: 60,
+                    top: -15,
+                    color: "gray",
+                  }}
+                >
+                  {hourValue % 60}min
+                </Text>
+              )}
             </View>
             <View
               style={{
@@ -168,7 +190,9 @@ const SearchScreen = ({ navigation }) => {
                 maximumValue={50}
                 value={distanceValue}
                 onValueChange={(value) => setDistanceValue(value)}
-                onSlidingComplete={(distanceValue) => setDistance(distanceValue)}
+                onSlidingComplete={(distanceValue) =>
+                  setDistance(distanceValue)
+                }
                 minimumTrackTintColor="#32749C"
                 maximumTrackTintColor="#000000"
               />
@@ -185,60 +209,64 @@ const SearchScreen = ({ navigation }) => {
                 </Text>
               )}
             </View>
-            <View style={styles.searchAuther}>
+            <View style={styles.header}>
               <View>
-                <View>
-                  <TouchableHighlight
-                    style={styles.btnSearch}
-                    onPress={handleAlpha}
-                  >
-                    <View style={styles.RowContainer}>
-                      <Checkbox value={checked} onValueChange={setChecked} />
-                      <Text style={styles.textInfos}>facile</Text>
-                    </View>
-                  </TouchableHighlight>
-                </View>
-                <View>
-                  <TouchableHighlight
-                    style={styles.btnSearch}
-                    onPress={handleAlpha}
-                  >
-                    <View style={styles.RowContainer}>
-                      <Checkbox value={checked} onValueChange={setChecked} />
-                      <Text style={styles.textInfos}>Moyenne</Text>
-                    </View>
-                  </TouchableHighlight>
-                </View>
-                <View>
-                  <TouchableHighlight
-                    style={styles.btnSearch}
-                    onPress={handleAlpha}
-                  >
-                    <View style={styles.RowContainer}>
-                      <Checkbox value={checked} onValueChange={setChecked} />
-                      <Text style={styles.textInfos}>Difficile</Text>
-                    </View>
-                  </TouchableHighlight>
-                </View>
-              </View>
-              <View style={{ marginLeft: 100 }}>
                 <TouchableHighlight
-                  style={styles.btnSearch}
-                  onPress={handleAlpha}
+                  underlayColor="transparent"
+                  style={
+                    orderActivity === "facile" ? styles.btnPressed : styles.btn
+                  }
+                  onPress={handleFacile}
                 >
-                  <View style={styles.RowContainer}>
-                    <Checkbox value={checked} onValueChange={setChecked} />
-                    <Text style={styles.textInfos}>Favoris</Text>
-                  </View>
+                  <Text
+                    style={
+                      orderActivity === "facile"
+                        ? styles.textBtnPressed
+                        : styles.textBtn
+                    }
+                  >
+                    Facile
+                  </Text>
                 </TouchableHighlight>
+              </View>
+              <View>
                 <TouchableHighlight
-                  style={styles.btnSearch}
-                  onPress={handleAlpha}
+                  underlayColor="transparent"
+                  style={
+                    orderActivity === "moyen" ? styles.btnPressed : styles.btn
+                  }
+                  onPress={handleMoyen}
                 >
-                  <View style={styles.RowContainer}>
-                    <Checkbox value={checked} onValueChange={setChecked} />
-                    <Text style={styles.textInfos}>dèja fait</Text>
-                  </View>
+                  <Text
+                    style={
+                      orderActivity === "moyen"
+                        ? styles.textBtnPressed
+                        : styles.textBtn
+                    }
+                  >
+                    Moyen
+                  </Text>
+                </TouchableHighlight>
+              </View>
+              <View>
+                <TouchableHighlight
+                  underlayColor="transparent"
+                  style={
+                    orderActivity === "difficile"
+                      ? styles.btnPressed
+                      : styles.btn
+                  }
+                  onPress={handleDifficile}
+                >
+                  <Text
+                    style={
+                      orderActivity === "difficile"
+                        ? styles.textBtnPressed
+                        : styles.textBtn
+                    }
+                  >
+                    Difficile
+                  </Text>
                 </TouchableHighlight>
               </View>
             </View>
@@ -279,14 +307,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   btn: {
-    backgroundColor: "#005b96",
-    color: "#fff",
+    backgroundColor: "white",
     borderRadius: 8,
-    height: 40,
-    width: 120,
+    height: 30,
+    borderWidth: 1,
+    borderColor: "#215778",
+    width: 100,
     margin: 8,
     justifyContent: "center",
     alignItems: "center",
+  },
+  btnPressed: {
+    backgroundColor: "#E9E8E8",
+    borderRadius: 8,
+    height: 30,
+    borderWidth: 1,
+    borderColor: "grey",
+    width: 100,
+    margin: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textBtn: {
+    fontWeight: "bold",
+  },
+  textBtnPressed: {
+    fontWeight: "bold",
+    color: "#215778",
   },
   input: {
     height: 40,
@@ -318,26 +365,21 @@ export default SearchScreen;
 /**
  * 
  * 
+            <View style={styles.searchAuther}>
+              <TouchableHighlight>
+                <View style={styles.RowContainer}>
+                  <Checkbox value={checked} onValueChange={setChecked} />
+                  <Text style={styles.textInfos}>Favoris</Text>
+                </View>
+              </TouchableHighlight>
 
- <View style={styles.header}>
-        <View>
-          <TouchableHighlight style={styles.btn} onPress={handleDifficulte}>
-            <Text style={{ color: "white", fontWeight: "bold" }}>
-              Difficulté
-            </Text>
-          </TouchableHighlight>
-        </View>
-        <View>
-          <TouchableHighlight style={styles.btn} onPress={handleDuree}>
-            <Text style={{ color: "white", fontWeight: "bold" }}>Durée</Text>
-          </TouchableHighlight>
-        </View>
-        <View>
-          <TouchableHighlight style={styles.btn} onPress={handleAlpha}>
-            <Text style={{ color: "white", fontWeight: "bold" }}>
-              Alphabetique
-            </Text>
-          </TouchableHighlight>
-        </View>
-      </View>
+              <TouchableHighlight style={{ marginLeft: 150 }}>
+                <View style={styles.RowContainer}>
+                  <Checkbox value={checked} onValueChange={setChecked} />
+                  <Text style={styles.textInfos}>déja fait</Text>
+                </View>
+              </TouchableHighlight>
+            </View>
+
+ 
  */
