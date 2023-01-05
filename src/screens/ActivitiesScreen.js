@@ -4,12 +4,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
+  ActivityIndicator,
   Dimensions,
-  TouchableHighlight,
   FlatList,
-  ScrollView,
-  SafeAreaView,
+  TouchableOpacity,
+  TouchableHighlight,
 } from "react-native";
 
 import supabase from "../../src/config/SupabaseClient.js";
@@ -20,16 +19,21 @@ import Carousel from "react-native-snap-carousel";
 
 function ActivitiesScreen({ navigation }) {
   const [activities, setActivities] = useState(null);
-  const [activityName, setActivitiesName] = useState();
   const [orderActivity, setOrderActivity] = useState("name");
+  const [loading,setLoading] = useState(false);
+  const [activitySelected,setActivitySelected] = useState("")
+
+  const data = ["Randonné", "vélo VTT", "la marche", "autre"];
 
   const SLIDER_WIDTH = Dimensions.get("window").width + 80;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
 
   const renderAct = ({ item }) => <ActivityItem item={item} />;
-
+   
   const getActivities = async () => {
+    
     try {
+      setLoading(true);
       const { data, error } = await supabase
         .from("Activity")
         .select()
@@ -38,32 +42,61 @@ function ActivitiesScreen({ navigation }) {
       if (data) {
         setActivities(data);
       }
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
+
+  const handlePress = (name) => {
+    setActivitySelected(name)
+  }
+
+  const renderItem = ({ item, index }) => (
+   
+      <TouchableHighlight
+      underlayColor="transparent"
+      onPress={() => handlePress(item.name)}
+      style={[
+        item.name === activitySelected ? styles.categoryContainerPressed : styles.categoryContainer,
+        index === 0 ? { marginLeft: 25 } : { marginLeft: 15 },
+      ]}
+    >
+      <Text style={{ color: "#32749C", fontWeight: "bold",fontSize: 18 }}>{item.name}</Text>
+    </TouchableHighlight>
+  
+
+  );
+
   useEffect(() => {
     getActivities();
-    //console.log(activities)
   }, []);
 
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
-      <Text style={styles.title}>Randonné</Text>
-      <Carousel
-        data={activities}
-        renderItem={renderAct}
-        sliderWidth={SLIDER_WIDTH}
-        itemWidth={ITEM_WIDTH}
-        useScrollView={true}
+      <View style={styles.underContainer}>
+        <Text style={styles.title}>Vos activités en plein air</Text>
+        <View style={{ height: 120 }}>
+          <FlatList
+            data={activities}
+            renderItem={renderItem}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
         
-      />
+        {loading && <ActivityIndicator />}
+        <View>
+         <FlatList data={activities} renderItem={renderAct}/>
+        </View>
+      </View>
+
       <Footer navigation={navigation} />
     </View>
   );
 }
-
 
 export default ActivitiesScreen;
 
@@ -72,7 +105,38 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     backgroundColor: "#fff",
-    alignItems: "center"
+    alignItems: "center",
+  },
+  underContainer: {
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "#fff",
+  },
+  categoryContainer: {
+    padding: 20,
+    height: 80,
+    borderRadius: 20,
+    backgroundColor: "white",
+    borderColor: "#215778",
+    marginVertical: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
+  },
+  categoryContainerPressed: {
+    padding: 20,
+    height: 80,
+    borderRadius: 20,
+    backgroundColor: "#E9E8E8",
+    borderColor: "#E9E8E8",
+    marginVertical: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
   },
   activityItem: {
     backgroundColor: "#D9E3E9",
@@ -83,8 +147,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: 18,
-    color: "#32749C",
+    fontSize: 28,
+    color: "#2E4053",
+    marginLeft: 15,
   },
   desc: {
     fontSize: 16,
@@ -103,3 +168,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 });
+
+//#E9E8E8
