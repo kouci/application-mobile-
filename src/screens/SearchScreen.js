@@ -278,7 +278,7 @@ const SearchScreen = ({ navigation }) => {
             <View>
               {activities &&
                 activities.map((activity) => (
-                  <ActivityItem key={activity.id} item={activity} />
+                  <ActivityItem key={activity.id} item={activity} navigation={navigation} />
                 ))}
             </View>
           </View>

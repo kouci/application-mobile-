@@ -62,7 +62,7 @@ const Connexion = ({navigation}) => {
         <View style={styles.container}>
           <Header />
           <View style={styles.form}>
-            <Form title="Connexion" handleSubmit={handleSubmit} email={email} setEmail={setEmail} password={password} setPassword={setPassword}/>
+            <Form title="Connexion" handleSubmit={handleSubmit} navigation={navigation} email={email} setEmail={setEmail} password={password} setPassword={setPassword}/>
             </View>
             <Footer navigation={navigation}/>
        </View>

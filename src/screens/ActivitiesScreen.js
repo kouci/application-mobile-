@@ -20,18 +20,16 @@ import Carousel from "react-native-snap-carousel";
 function ActivitiesScreen({ navigation }) {
   const [activities, setActivities] = useState(null);
   const [orderActivity, setOrderActivity] = useState("name");
-  const [loading,setLoading] = useState(false);
-  const [activitySelected,setActivitySelected] = useState("")
+  const [loading, setLoading] = useState(false);
+  const [activitySelected, setActivitySelected] = useState("");
 
   const data = ["Randonné", "vélo VTT", "la marche", "autre"];
 
-  const SLIDER_WIDTH = Dimensions.get("window").width + 80;
-  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
 
-  const renderAct = ({ item }) => <ActivityItem item={item} />;
-   
+
+  const renderAct = ({ item }) => <ActivityItem item={item} navigation={navigation} />;
+
   const getActivities = async () => {
-    
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -50,23 +48,25 @@ function ActivitiesScreen({ navigation }) {
   };
 
   const handlePress = (name) => {
-    setActivitySelected(name)
-  }
+    setActivitySelected(name);
+  };
 
   const renderItem = ({ item, index }) => (
-   
-      <TouchableHighlight
-      underlayColor="transparent"
-      onPress={() => handlePress(item.name)}
+    <TouchableHighlight
+      underlayColor="white"
       style={[
-        item.name === activitySelected ? styles.categoryContainerPressed : styles.categoryContainer,
+        item.name === activitySelected
+          ? styles.categoryContainerPressed
+          : styles.categoryContainer,
         index === 0 ? { marginLeft: 25 } : { marginLeft: 15 },
+       
       ]}
+      onPress={() => handlePress(item.name)}
     >
-      <Text style={{ color: "#32749C", fontWeight: "bold",fontSize: 18 }}>{item.name}</Text>
+      <Text style={{ color: "#32749C", fontWeight: "bold", fontSize: 17 }}>
+        {item.name}
+      </Text>
     </TouchableHighlight>
-  
-
   );
 
   useEffect(() => {
@@ -86,10 +86,10 @@ function ActivitiesScreen({ navigation }) {
             showsHorizontalScrollIndicator={false}
           />
         </View>
-        
+
         {loading && <ActivityIndicator />}
         <View>
-         <FlatList data={activities} renderItem={renderAct}/>
+          <FlatList data={activities} renderItem={renderAct} />
         </View>
       </View>
 
@@ -117,7 +117,6 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 20,
     backgroundColor: "white",
-    borderColor: "#215778",
     marginVertical: 15,
     alignItems: "center",
     justifyContent: "center",
@@ -130,7 +129,6 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 20,
     backgroundColor: "#E9E8E8",
-    borderColor: "#E9E8E8",
     marginVertical: 15,
     alignItems: "center",
     justifyContent: "center",

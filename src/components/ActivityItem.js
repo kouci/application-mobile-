@@ -1,10 +1,13 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-const ActivityItem = ({ item }) => {
+const ActivityItem = ({ item, navigation}) => {
+
+  //navigation.navigate("ActivityPage", {id : item.id})
   return (
-    <View style={styles.activityItem}>
+    <TouchableHighlight  underlayColor="white" onPress={() => navigation.navigate("Activity")} style={styles.activityItem}>
+    <View >
       <View style={styles.headerCard}>
         <Image
           style={{ width: 100, height: 100, borderRadius: 50, marginLeft: 15 }}
@@ -46,6 +49,7 @@ const ActivityItem = ({ item }) => {
             name="star-outline"
           ></Ionicons>
     </View>
+    </TouchableHighlight>
   );
 };
 
