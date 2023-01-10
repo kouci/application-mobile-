@@ -47,9 +47,17 @@ const ActivityScreen = ({ navigation }) => {
           )}
         />
       </View>
+      <View style={{flexDirection: "row", alignItems: 'center'}}>
       <Text style={{ fontSize: 15, color: "#2E4053", fontWeight: "bold"}}>
         Randonné Pic saint louop
       </Text>
+      <Ionicons
+            style={{marginLeft: 25}}
+            size={30}
+            color="#215778"
+            name="star-outline"
+          ></Ionicons>
+      </View>
       <View style={styles.infos}>
       <View style={styles.rowContainer}>
           <View style={styles.containerText}>
