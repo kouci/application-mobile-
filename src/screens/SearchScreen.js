@@ -7,6 +7,7 @@ import {
   ScrollView,
   Dimensions,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import supabase from "../../src/config/SupabaseClient.js";
@@ -21,6 +22,7 @@ const SearchScreen = ({ navigation }) => {
   //states
   const [activities, setActivities] = useState(null);
   const [orderActivity, setOrderActivity] = useState("");
+  const [loading,setLoading] = useState(false);
  
   const [hourValue, setHourValue] = useState(0);
   const [distanceValue, setDistanceValue] = useState(0);
@@ -64,6 +66,7 @@ const SearchScreen = ({ navigation }) => {
   const renderAct = ({ item }) => <ActivityItem item={item} />;
   //.order(orderActivity);
   const getActivities = async () => {
+    setLoading(true);
     try {
       const { data, error } = await supabase.from("Activity").select();
 
@@ -71,6 +74,7 @@ const SearchScreen = ({ navigation }) => {
       if (data) {
         setActivities(data);
       }
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -270,10 +274,11 @@ const SearchScreen = ({ navigation }) => {
                 </TouchableHighlight>
               </View>
             </View>
+            {loading && <ActivityIndicator />}
             <View>
               {activities &&
                 activities.map((activity) => (
-                  <ActivityItem key={activity.id} item={activity} />
+                  <ActivityItem key={activity.id} item={activity} navigation={navigation} />
                 ))}
             </View>
           </View>
