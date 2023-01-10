@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const Form = ({
   title,
@@ -64,3 +65,6 @@ const styles = StyleSheet.create({
 });
 
 export default Form;
+
+// <ion-icon name="person-add-outline"></ion-icon>
+// person-outline
