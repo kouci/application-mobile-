@@ -28,4 +28,27 @@ export default function App() {
 }
 
 
+ // *[STYLE]
+ 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center'
+  },
+  btn:{
+    backgroundColor: '#005b96',
+    color: "#fff",
+    borderRadius: 8,
+    height : 40,
+    width : 120,
+    margin : 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  header : {
+    marginTop : 50,
+    flexDirection : "row"
+  }
+});
 

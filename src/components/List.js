@@ -8,10 +8,9 @@ import {
   TouchableHighlight,
   FlatList,
 } from "react-native";
-
 import supabase from "../../src/config/SupabaseClient.js";
 import ActivityItem from "./ActivityItem.js";
-
+//*Composant Permettant l'affichage de la flat list des éléments
 //TODO Utiliser le composant DIMENSION de react-native pour gerer l'afficange de l'écran
 const List = (props) => {
   const [activities, setActivities] = useState(null);
