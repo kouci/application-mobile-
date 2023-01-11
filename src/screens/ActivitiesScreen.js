@@ -88,8 +88,8 @@ function ActivitiesScreen({ navigation }) {
         </View>
 
         {loading && <ActivityIndicator />}
-        <View>
-          <FlatList data={activities} renderItem={renderAct} />
+        <View >
+          <FlatList style={{marginHorizontal: 10}} data={activities} renderItem={renderAct} />
         </View>
       </View>
 
