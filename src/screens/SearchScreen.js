@@ -139,7 +139,7 @@ const SearchScreen = ({ navigation }) => {
                 width: screenWidth - 30,
               }}
             >
-              {!openAc && (
+              {!openLo && !openAc && (
                 <View>
                 <View
                   style={{
