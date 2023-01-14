@@ -31,7 +31,7 @@ const Form = ({
       />
       <View>
         <TouchableHighlight style={styles.btn} onPress={handleSubmit}>
-          <Text style={{ color: "white", fontWeight: "bold" }}>Connexion</Text>
+          <Text style={{ color: "white", fontWeight: "bold" }}>{title === "Connexion" ? "Connexion" : "Créer un compte" }</Text>
         </TouchableHighlight>
       </View>
     </View>

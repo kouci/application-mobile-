@@ -33,6 +33,7 @@ const SearchScreen = ({ navigation }) => {
   const [localisation, setLocalisation] = useState(null);
   const [openAc, setOpenAc] = useState(false);
   const [activity, setActivity] = useState(false);
+
   // donnée pour tester
   const [items, setItems] = useState([
     { label: "Randonné", value: "Randonné" },
@@ -42,7 +43,7 @@ const SearchScreen = ({ navigation }) => {
     { label: "Escalade", value: "Escalade" },
   ]);
 
-  const countries = ["Egypt", "Canada", "Australia", "Ireland"];
+
   const screenWidth = Dimensions.get("window").width;
 
   const getAllActivities = async () => {
@@ -439,8 +440,8 @@ const SearchScreen = ({ navigation }) => {
                 </Text>
               </TouchableHighlight>
             </View>
-            <Button title="Reset" onPress={handleReset} />
           </View>
+          <Button title="Réinitialiser la recherche" style={{borderRadius: 10}} onPress={handleReset} />
           <ScrollView nestedScrollEnabled={true}>
             {loading && <ActivityIndicator />}
             <View>
