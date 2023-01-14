@@ -16,6 +16,7 @@ import ActivityItem from "../components/ActivityItem.js";
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
 import DropDownPicker from "react-native-dropdown-picker";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const SearchScreen = ({ navigation }) => {
   //states
@@ -34,7 +35,7 @@ const SearchScreen = ({ navigation }) => {
   const [openAc, setOpenAc] = useState(false);
   const [activity, setActivity] = useState(false);
 
-  // donnée pour afficher les type d'activities 
+  // donnée pour afficher les type d'activities
   const [items, setItems] = useState([
     { label: "Randonné", value: "Randonné" },
     { label: "Vélo VTT", value: "VTT" },
@@ -42,7 +43,6 @@ const SearchScreen = ({ navigation }) => {
     { label: "Pêche", value: "Pêche" },
     { label: "Escalade", value: "Escalade" },
   ]);
-
 
   const screenWidth = Dimensions.get("window").width;
 
@@ -135,7 +135,7 @@ const SearchScreen = ({ navigation }) => {
       } catch (error) {
         console.error(error);
       }
-    } else if (isDifficult == true && like == false && isHour == false ) {
+    } else if (isDifficult == true && like == false && isHour == false) {
       try {
         const { data, error } = await supabase
           .from("Activity")
@@ -182,7 +182,7 @@ const SearchScreen = ({ navigation }) => {
           .select()
           .eq("difficulte", difficult)
           .like("name", "%" + activity + "%")
-          .lt('duree', hour*60);
+          .lt("duree", hour * 60);
         if (data) {
           console.log(data);
           setActivities(data);
@@ -197,7 +197,7 @@ const SearchScreen = ({ navigation }) => {
           .from("Activity")
           .select()
           .eq("difficulte", difficult)
-          .lt('duree', hour*60);
+          .lt("duree", hour * 60);
         if (data) {
           setActivities(data);
         }
@@ -211,7 +211,7 @@ const SearchScreen = ({ navigation }) => {
           .from("Activity")
           .select()
           .like("name", "%" + activity + "%")
-          .lt('duree', hour*60);
+          .lt("duree", hour * 60);
         if (data) {
           setActivities(data);
         }
@@ -221,7 +221,10 @@ const SearchScreen = ({ navigation }) => {
       }
     } else if (isDifficult == false && like == false && isHour == true) {
       try {
-        const { data, error } = await supabase.from("Activity").select().lt('duree', hour*60);
+        const { data, error } = await supabase
+          .from("Activity")
+          .select()
+          .lt("duree", hour * 60);
         if (data) {
           setActivities(data);
         }
@@ -441,9 +444,22 @@ const SearchScreen = ({ navigation }) => {
               </TouchableHighlight>
             </View>
           </View>
-          <Button title="Réinitialiser la recherche" style={{borderRadius: 10}} onPress={handleReset} />
+          <TouchableHighlight  underlayColor="#DDE8F1" onPress={handleReset} style={styles.btnRecherche}>
+            <View style={{flexDirection: "row" ,alignItems: 'center', justifyContent: "center"}}>
+            <Ionicons
+              name="sync-outline"
+              size={19}
+              color={"#215778"}
+              style={{ marginTop: 5 }}
+            />
+            <Text style={{marginLeft: 10, fontSize: 15, color: "#215778"}}>réinitialiser la recharche</Text>
+            </View>
+          </TouchableHighlight>
+
           <ScrollView nestedScrollEnabled={true}>
-            {loading && <ActivityIndicator size={50} style={{marginTop: 100}}/>}
+            {loading && (
+              <ActivityIndicator size={50} style={{ marginTop: 100 }} />
+            )}
             <View>
               {activities &&
                 activities.map((activity) => (
@@ -493,6 +509,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#215778",
     width: 100,
+    margin: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  btnRecherche : {
+    backgroundColor: "white",
+    borderRadius: 8,
+    height: 30,
+    borderWidth: 1,
+    borderColor: "#215778",
+    width: 300,
     margin: 8,
     justifyContent: "center",
     alignItems: "center",
