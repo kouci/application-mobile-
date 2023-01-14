@@ -53,14 +53,47 @@ const SearchScreen = ({ navigation }) => {
     }
   };
 
-  const handleFacile = () => {
-    setOrderActivity("facile");
+  const handleFacile = async () => {
+    setActivities(null);
+    setOrderActivity("facile")
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.from("Activity").select().eq('difficulte', 0);
+      if (data) {
+        setActivities(data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const handleMoyen = () => {
-    setOrderActivity("moyen");
+  const handleMoyen = async () => {
+    setActivities(null);
+    setOrderActivity("moyen")
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.from("Activity").select().eq('difficulte', 1);
+      if (data) {
+        setActivities(data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const handleDifficile = () => {
-    setOrderActivity("difficile");
+  const handleDifficile = async () => {
+    setActivities(null);
+    setOrderActivity("difficile")
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.from("Activity").select().eq('difficulte', 2);
+      if (data) {
+        setActivities(data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const renderAct = ({ item }) => <ActivityItem item={item} />;
@@ -70,7 +103,6 @@ const SearchScreen = ({ navigation }) => {
     try {
       const { data, error } = await supabase.from("Activity").select();
 
-      //console.log(data);
       if (data) {
         setActivities(data);
       }
@@ -85,7 +117,7 @@ const SearchScreen = ({ navigation }) => {
     getActivities();
     //console.log(activities);
     getImages();
-  }, [orderActivity]);
+  }, []);
 
   // useEffect pour le slidbar de la distance
   useEffect(() => {
@@ -278,7 +310,7 @@ const SearchScreen = ({ navigation }) => {
             <View>
               {activities &&
                 activities.map((activity) => (
-                  <ActivityItem key={activity.id} item={activity} navigation={navigation} />
+                  <ActivityItem key={activity.id} item={activity} navigation={navigation} style={styles.itemActivity}/>
                 ))}
             </View>
           </View>
@@ -363,6 +395,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  itemActivity: {
+    width: 330
+  }
 });
 
 export default SearchScreen;

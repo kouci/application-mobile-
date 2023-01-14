@@ -4,10 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import supabase from "../config/SupabaseClient";
 const Footer = ({ navigation }) => {
-  const [userAuth, setUserAuth] = useState(supabase.auth.user());
-  const [colorHomeIcon, setColorHomeIcon] = useState("#92C5CE");
-  const [colorSearchIcon, setColorSearchIcon] = useState("#92C5CE");
-  const [colorProfilIcon, setColorProfilIcon] = useState("#92C5CE");
+
   const getData = async () => {
     try {
       const value = supabase.auth.user();
@@ -29,44 +26,43 @@ const Footer = ({ navigation }) => {
     //getData();
     //console.log(supabase.auth.session());
     //console.log('-------------');
-    setColorSearchIcon("#92C5CE");
-    setColorProfilIcon("#215778");
-    setColorHomeIcon("#92C5CE");
-    console.log(userAuth);
-    if (userAuth != null) {
+
+    console.log("----");
+    console.log(supabase.auth.session());
+    console.log("-----");
+    if (supabase.auth.session() != null) {
       navigation.navigate("Profil");
-    } else {
+    } 
+    else {
       navigation.navigate("Connexion");
-    }
+      }
+      
+    
   };
   return (
     <View style={styles.container}>
       <Ionicons
         name="home"
         size={35}
-        color={colorHomeIcon}
+        color={"#215778"}
         onPress={() => {
-          setColorSearchIcon("#92C5CE");
-          setColorProfilIcon("#92C5CE");
-          setColorHomeIcon("#215778");
+ 
           navigation.navigate("Home");
         }}
       />
       <Ionicons
         name="search"
         size={35}
-        color={colorSearchIcon}
+        color={"#215778"}
         onPress={() => {
-          setColorSearchIcon("#215778");
-          setColorProfilIcon("#92C5CE");
-          setColorHomeIcon("#92C5CE");
+
           navigation.navigate("Search");
         }}
       />
       <Ionicons
         name="person-circle-outline"
         size={35}
-        color={colorProfilIcon}
+        color={"#215778"}
         onPress={handleProfile}
       />
     </View>

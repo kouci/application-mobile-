@@ -5,15 +5,55 @@ import {
   Text,
   TouchableHighlight,
   View,
+  Dimensions,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-
+/**
+ * TODO [Sydney] : ajouter la localisation pour calculer la distance 
+ * 
+ */
 const ActivityItem = ({ item, navigation }) => {
   //navigation.navigate("ActivityPage", {id : item.id})
+  const getDifficulte = () =>{
+    if(item.difficulte === 0){
+      return  <Text style={styles.infosText}>Facile</Text>
+    }
+    if(item.difficulte === 1){
+      return  <Text style={styles.infosText}>Moyen</Text>
+    }
+    if(item.difficulte === 2){
+      return  <Text style={styles.infosText}>Difficile</Text>
+    }
+    else{
+    } 
+  }
+
+  function convertSeconds(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    seconds = seconds % 3600;
+    const minutes = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    return { hours, minutes, seconds };
+  }
+  
+const getDuree = () =>{
+  const { hours, minutes, seconds } = convertSeconds(item.duree);
+  if (hours === 0){
+    return <Text style={styles.infosText}> {minutes + "m" + seconds + "s"} </Text>
+  }
+  else {
+    return <Text style={styles.infosText}> {hours + "h"+ minutes + "m" + seconds + "s"} </Text>
+
+  }
+
+
+}
   return (
     <TouchableHighlight
       underlayColor="white"
-      onPress={() => navigation.navigate("Activity")}
+      onPress={() => navigation.navigate("Activity", {
+        item: item
+      })}
       style={styles.activityItem}
     >
       <View style={{ position: "relative" }}>
@@ -43,7 +83,8 @@ const ActivityItem = ({ item, navigation }) => {
                 size={25}
                 color="#EC7063"
               ></Ionicons>
-              <Text style={styles.infosText}>facile</Text>
+              {getDifficulte()}
+             
             </View>
             <View style={styles.infos}>
               <Ionicons
@@ -52,7 +93,8 @@ const ActivityItem = ({ item, navigation }) => {
                 color="#EC7063"
                 name="hourglass-outline"
               ></Ionicons>
-              <Text style={styles.infosText}>2h 30min</Text>
+              {getDuree()}
+            
             </View>
           </View>
         </View>
@@ -60,12 +102,8 @@ const ActivityItem = ({ item, navigation }) => {
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.desc}>
           {item.description}
         </Text>
-        <Ionicons
-          style={{ position: "absolute", top: 10, left: 280, bottom: 0 }}
-          size={30}
-          color="#215778"
-          name="star-outline"
-        ></Ionicons>
+        
+      
       </View>
     </TouchableHighlight>
   );
@@ -123,6 +161,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingBottom: 40,
     shadowColor: "#32749C",
+    width : Dimensions.get('window').width - 20,
     height: 200,
     marginTop: 10,
     marginHorizontal: 5,

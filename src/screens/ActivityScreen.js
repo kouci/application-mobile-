@@ -11,15 +11,98 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MapView, { Marker } from "react-native-maps";
+import { useState } from "react";
+import {addToFavorite, getActivitiesFavorites, deleteFavActivity} from '../utils/ActivityUsers';
+import supabase from "../../src/config/SupabaseClient.js";
+import { useEffect } from "react";
+// TODO Gerer la distance avec la position de l user
 
-const ActivityScreen = ({ navigation }) => {
+const ActivityScreen = ({ route, navigation }) => {
   const { width, height } = Dimensions.get("window");
-
-  console.log(height)
+  const item = route.params
+  const [activity,setActivity] = useState(item)
+  const [favorite, setFavorite] = useState(false);
+  
   const data = [
     { id: "1", image: require("../../assets/rondo1.jpg") },
     { id: "2", image: require("../../assets/rondonnée2.jpg") },
   ];
+
+  const getDifficulte = () =>{
+    if(activity.item.difficulte === 0){
+      return  <Text style={styles.RigtText}>Facile</Text>
+    }
+    if(activity.item.difficulte === 1){
+
+      return  <Text style={styles.RigtText}>Moyen</Text>
+    }
+    if(activity.item.difficulte === 2){
+      return  <Text style={styles.RigtText}>Difficile</Text>
+    }
+    else{
+    } 
+  }
+
+  const handleFavorite = () => {
+    //addToFavorite(supabase.auth.user().id, activity.item.id)
+    if(!supabase.auth.user()){
+      console.log('Merci de se connecter pour acceder a cette fonctionnalité');
+    }
+    else{
+      if(favorite == false){
+        addToFavorite(supabase.auth.user().id, activity.item.id)
+        setFavorite(true)
+      }
+      else{     
+        deleteFavActivity(supabase.auth.user().id, activity.item.id)
+        setFavorite(false)
+      }
+    }
+    
+    
+  }
+
+  function convertSeconds(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    seconds = seconds % 3600;
+    const minutes = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    return { hours, minutes, seconds };
+  }
+  
+const getDuree = () =>{
+  const { hours, minutes, seconds } = convertSeconds(activity.item.duree);
+  if (hours === 0){
+    return <Text style={styles.RigtText}> {minutes + "m" + seconds + "s"} </Text>
+  }
+  else {
+    return <Text style={styles.RigtText}> {hours + "h"+ minutes + "m" + seconds + "s"} </Text>
+
+  }
+}
+
+const setStar = async () => {
+  const { data, selectError } = await supabase
+  .from("User-activities")
+  .select()
+  .eq("activityId", activity.item.id)
+  .eq("userId", supabase.auth.user().id.toString());
+
+  console.log(data);
+  if(data.length != 0){
+    setFavorite(true)
+  } 
+  else{
+    setFavorite(false)
+  }   
+}
+
+useEffect(() => {
+  if(supabase.auth.user()){
+    setStar();
+  }
+  
+}, []);
 
   return (
     <View style={[styles.container, {height: height}]}>
@@ -48,15 +131,23 @@ const ActivityScreen = ({ navigation }) => {
         />
       </View>
       <View style={{flexDirection: "row", alignItems: 'center'}}>
+  
       <Text style={{ fontSize: 15, color: "#2E4053", fontWeight: "bold"}}>
-        Randonné Pic saint louop
+        {activity.item.name}
       </Text>
-      <Ionicons
-            style={{marginLeft: 25}}
-            size={30}
-            color="#215778"
-            name="star-outline"
-          ></Ionicons>
+      {favorite == true ? <Ionicons
+      style={{marginLeft: 25}}
+      size={30}
+      color="#F5EA06"
+      name="star"
+      onPress={handleFavorite}
+    ></Ionicons> : <Ionicons
+    style={{marginLeft: 25}}
+    size={30}
+    color="#215778"
+    name="star-outline"
+    onPress={handleFavorite}
+  ></Ionicons>}
       </View>
       <View style={styles.infos}>
       <View style={styles.rowContainer}>
@@ -69,7 +160,8 @@ const ActivityScreen = ({ navigation }) => {
             ></Ionicons>
             <Text style={styles.text}> Difficulté</Text>
           </View>
-          <Text style={styles.RigtText}>Facile</Text>
+          {getDifficulte()}
+          
         </View>
         <View style={styles.rowContainer}>
           <View style={styles.containerText}>
@@ -81,7 +173,7 @@ const ActivityScreen = ({ navigation }) => {
             ></Ionicons>
             <Text style={styles.text}> Durée</Text>
           </View>
-          <Text style={styles.RigtText}> 3h:50 min </Text>
+          {getDuree()}
         </View>
         <View style={styles.rowContainer}>
           <View style={styles.containerText}>
@@ -91,22 +183,13 @@ const ActivityScreen = ({ navigation }) => {
               color="#EC7063"
               name="golf-outline"
             ></Ionicons>
+
             <Text style={styles.text}>Distance</Text>
           </View>
           <Text style={styles.RigtText}> 15 Km </Text>
         </View>
-        <View style={styles.rowContainer}>
-          <View style={styles.containerText}>
-            <Ionicons
-              styles={styles.icons}
-              size={25}
-              color="#EC7063"
-              name="trending-up-outline"
-            ></Ionicons>
-            <Text style={styles.text}>Dénevilé</Text>
-          </View>
-          <Text style={styles.RigtText}> 200 M</Text>
-        </View>
+          <Text style={styles.textDescription}>Description</Text>
+              <Text>  {activity.item.description}</Text>
         <MapView
           style={{ height: 250, width: width - 20, marginTop: 10 }}
           initialRegion={{
@@ -160,4 +243,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 8,
   },
+  textDescription: {
+    marginTop : 17,
+    marginBottom : 13,
+    fontSize: 15,
+    fontWeight: "bold",
+    justifyContent:"center",
+    textAlign : "center",
+  }
 });
