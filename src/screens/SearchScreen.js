@@ -8,6 +8,7 @@ import {
   Dimensions,
   SafeAreaView,
   ActivityIndicator,
+  Button,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import supabase from "../../src/config/SupabaseClient.js";
@@ -21,12 +22,12 @@ const SearchScreen = ({ navigation }) => {
   const [activities, setActivities] = useState(null);
   const [orderActivity, setOrderActivity] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [allActivity, setAllActivity] = useState(null);
   const [hourValue, setHourValue] = useState(0);
   const [distanceValue, setDistanceValue] = useState(0);
   const [hour, setHour] = useState(0);
   const [distance, setDistance] = useState(0);
-
+  const [difficult, setDifficult] = useState(null);
   /* valeur local pour dropList activité et localisation open s'active quand la droplist s'ouvre/ */
   const [openLo, setOpenLo] = useState(false);
   const [localisation, setLocalisation] = useState(null);
@@ -35,11 +36,29 @@ const SearchScreen = ({ navigation }) => {
   // donnée pour tester
   const [items, setItems] = useState([
     { label: "Randonné", value: "Randonné" },
-    { label: "Vélo VTT", value: "vélo VTT" },
+    { label: "Vélo VTT", value: "VTT" },
+    { label: "Accrobranche", value: "Accrobranche" },
+    { label: "Pêche", value: "Pêche" },
+    { label: "Escalade", value: "Escalade" },
   ]);
 
   const countries = ["Egypt", "Canada", "Australia", "Ireland"];
   const screenWidth = Dimensions.get("window").width;
+
+  const getAllActivities = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.from("List-activities").select();
+
+      if (data) {
+        setAllActivity(data);
+        console.log(data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const getImages = async () => {
     try {
@@ -52,46 +71,16 @@ const SearchScreen = ({ navigation }) => {
   };
 
   const handleFacile = async () => {
-    setActivities(null);
-    setOrderActivity("facile")
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.from("Activity").select().eq('difficulte', 0);
-      if (data) {
-        setActivities(data);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
+    setDifficult(0);
+    setOrderActivity("facile");
   };
   const handleMoyen = async () => {
-    setActivities(null);
-    setOrderActivity("moyen")
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.from("Activity").select().eq('difficulte', 1);
-      if (data) {
-        setActivities(data);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
+    setDifficult(1);
+    setOrderActivity("moyen");
   };
   const handleDifficile = async () => {
-    setActivities(null);
-    setOrderActivity("difficile")
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.from("Activity").select().eq('difficulte', 2);
-      if (data) {
-        setActivities(data);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
+    setDifficult(2);
+    setOrderActivity("difficile");
   };
 
   const renderAct = ({ item }) => <ActivityItem item={item} />;
@@ -110,11 +99,157 @@ const SearchScreen = ({ navigation }) => {
     }
   };
 
+  const getActivitiesFilter = async () => {
+    setLoading(true);
+    setActivities(null);
+    let like = false;
+    let isDifficult = false;
+    let isDistance = false;
+    let isHour = false;
+    if (activity != false) {
+      like = true;
+    }
+    if (difficult != null) {
+      isDifficult = true;
+    }
+    if (distance != 0) {
+      isDistance = true;
+    }
+    if (hour != 0) {
+      isHour = true;
+    }
+
+    if (isDifficult == true && like == true && isHour == false) {
+      try {
+        const { data, error } = await supabase
+          .from("Activity")
+          .select()
+          .eq("difficulte", difficult)
+          .like("name", "%" + activity + "%");
+        if (data) {
+          console.log(data);
+          setActivities(data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (isDifficult == true && like == false && isHour == false ) {
+      try {
+        const { data, error } = await supabase
+          .from("Activity")
+          .select()
+          .eq("difficulte", difficult);
+        if (data) {
+          setActivities(data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (isDifficult == false && like == true && isHour == false) {
+      try {
+        const { data, error } = await supabase
+          .from("Activity")
+          .select()
+          .like("name", "%" + activity + "%");
+        if (data) {
+          setActivities(data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (isDifficult == false && like == false && isHour == false) {
+      try {
+        const { data, error } = await supabase.from("Activity").select();
+        if (data) {
+          setActivities(data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    //*__________________
+
+    if (isDifficult == true && like == true && isHour == true) {
+      try {
+        const { data, error } = await supabase
+          .from("Activity")
+          .select()
+          .eq("difficulte", difficult)
+          .like("name", "%" + activity + "%")
+          .lt('duree', hour*60);
+        if (data) {
+          console.log(data);
+          setActivities(data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (isDifficult == true && like == false && isHour == true) {
+      try {
+        const { data, error } = await supabase
+          .from("Activity")
+          .select()
+          .eq("difficulte", difficult)
+          .lt('duree', hour*60);
+        if (data) {
+          setActivities(data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (isDifficult == false && like == true && isHour == true) {
+      try {
+        const { data, error } = await supabase
+          .from("Activity")
+          .select()
+          .like("name", "%" + activity + "%")
+          .lt('duree', hour*60);
+        if (data) {
+          setActivities(data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (isDifficult == false && like == false && isHour == true) {
+      try {
+        const { data, error } = await supabase.from("Activity").select().lt('duree', hour*60);
+        if (data) {
+          setActivities(data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    //*---------------
+    setLoading(false);
+  };
+
+  const handleReset = () => {
+    setDifficult(null);
+    setDistance(0);
+    setHour(0);
+    setActivity(false);
+    setOrderActivity(null);
+    setHourValue(0);
+  };
+
   // Les useEffects
   useEffect(() => {
     getActivities();
+    getAllActivities();
     //console.log(activities);
     getImages();
+    console.log(allActivity);
   }, []);
 
   // useEffect pour le slidbar de la distance
@@ -127,52 +262,41 @@ const SearchScreen = ({ navigation }) => {
     console.log("la valeu de heure" + hour);
   }, [hour]);
 
+  //* useEffect pour le type d'activité choisir dans le dropdown
+  useEffect(() => {
+    getActivitiesFilter();
+  }, [activity, distance, hour, difficult]);
+
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
 
-      <ScrollView nestedScrollEnabled={true}>
-        <SafeAreaView horizontal={false}>
-          <View style={styles.container}>
-            <View
-              style={{ width: screenWidth - 30, zIndex: 5, marginBottom: 10 }}
-            >
+      <SafeAreaView horizontal={false}>
+        <View style={styles.container}>
+          {!openLo && (
+            <View style={{ width: screenWidth - 30, zIndex: 5 }}>
               <DropDownPicker
-                open={openLo}
-                value={localisation}
+                open={openAc}
+                value={activity}
                 items={items}
                 searchable
-                setOpen={setOpenLo}
-                setValue={setLocalisation}
-                setItems={setItems}
-                placeholder="Localisation"
+                setOpen={setOpenAc}
+                setValue={setActivity}
+                placeholder="Activitées"
               />
             </View>
-            {!openLo && (
-              <View style={{ width: screenWidth - 30, zIndex: 5 }}>
-                <DropDownPicker
-                  open={openAc}
-                  value={activity}
-                  items={items}
-                  searchable
-                  setOpen={setOpenAc}
-                  setValue={setActivity}
-                  setItems={setItems}
-                  placeholder="Activity"
-                />
-              </View>
-            )}
+          )}
 
-            <View
-              style={{
-                position: "relative",
-                flexDirection: "row",
-                alignItems: "center",
-                width: screenWidth - 30,
-              }}
-            >
-              {!openLo && !openAc && (
-                <View>
+          <View
+            style={{
+              position: "relative",
+              flexDirection: "row",
+              alignItems: "center",
+              width: screenWidth - 30,
+            }}
+          >
+            {!openLo && !openAc && (
+              <View>
                 <View
                   style={{
                     position: "relative",
@@ -219,123 +343,121 @@ const SearchScreen = ({ navigation }) => {
                   )}
                 </View>
                 <View
-              style={{
-                position: "relative",
-                flexDirection: "row",
-                alignItems: "center",
-                width: screenWidth - 30,
-              }}
-            >
-              <Text>Distance:</Text>
-              <Slider
-                style={{ width: "80%", height: 50 }}
-                minimumValue={0}
-                step={1.0}
-                maximumValue={50}
-                value={distanceValue}
-                onValueChange={(value) => setDistanceValue(value)}
-                onSlidingComplete={(distanceValue) =>
-                  setDistance(distanceValue)
-                }
-                minimumTrackTintColor="#32749C"
-                maximumTrackTintColor="#000000"
-              />
-              {distanceValue !== 0 && (
-                <Text
                   style={{
-                    postion: "absolute",
-                    right: 60,
-                    top: -15,
-                    color: "gray",
+                    position: "relative",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    width: screenWidth - 30,
                   }}
                 >
-                  {distanceValue} Km
-                </Text>
-              )}
-            </View>
+                  <Text>Distance:</Text>
+                  <Slider
+                    style={{ width: "80%", height: 50 }}
+                    minimumValue={0}
+                    step={1.0}
+                    maximumValue={50}
+                    value={distanceValue}
+                    onValueChange={(value) => setDistanceValue(value)}
+                    onSlidingComplete={(distanceValue) =>
+                      setDistance(distanceValue)
+                    }
+                    minimumTrackTintColor="#32749C"
+                    maximumTrackTintColor="#000000"
+                  />
+                  {distanceValue !== 0 && (
+                    <Text
+                      style={{
+                        postion: "absolute",
+                        right: 60,
+                        top: -15,
+                        color: "gray",
+                      }}
+                    >
+                      {distanceValue} Km
+                    </Text>
+                  )}
                 </View>
-              )}
+              </View>
+            )}
+          </View>
+
+          <View style={styles.header}>
+            <View>
+              <TouchableHighlight
+                underlayColor="transparent"
+                style={
+                  orderActivity === "facile" ? styles.btnPressed : styles.btn
+                }
+                onPress={handleFacile}
+              >
+                <Text
+                  style={
+                    orderActivity === "facile"
+                      ? styles.textBtnPressed
+                      : styles.textBtn
+                  }
+                >
+                  Facile
+                </Text>
+              </TouchableHighlight>
             </View>
-            
-            <View style={styles.header}>
-              <View>
-                <TouchableHighlight
-                  underlayColor="transparent"
+            <View>
+              <TouchableHighlight
+                underlayColor="transparent"
+                style={
+                  orderActivity === "moyen" ? styles.btnPressed : styles.btn
+                }
+                onPress={handleMoyen}
+              >
+                <Text
                   style={
-                    orderActivity === "facile" ? styles.btnPressed : styles.btn
+                    orderActivity === "moyen"
+                      ? styles.textBtnPressed
+                      : styles.textBtn
                   }
-                  onPress={handleFacile}
                 >
-                  <Text
-                    style={
-                      orderActivity === "facile"
-                        ? styles.textBtnPressed
-                        : styles.textBtn
-                    }
-                  >
-                    Facile
-                  </Text>
-                </TouchableHighlight>
-              </View>
-              <View>
-                <TouchableHighlight
-                  underlayColor="transparent"
-                  style={
-                    orderActivity === "moyen" ? styles.btnPressed : styles.btn
-                  }
-                  onPress={handleMoyen}
-                >
-                  <Text
-                    style={
-                      orderActivity === "moyen"
-                        ? styles.textBtnPressed
-                        : styles.textBtn
-                    }
-                  >
-                    Moyen
-                  </Text>
-                </TouchableHighlight>
-              </View>
-              <View>
-                <TouchableHighlight
-                  underlayColor="transparent"
+                  Moyen
+                </Text>
+              </TouchableHighlight>
+            </View>
+            <View>
+              <TouchableHighlight
+                underlayColor="transparent"
+                style={
+                  orderActivity === "difficile" ? styles.btnPressed : styles.btn
+                }
+                onPress={handleDifficile}
+              >
+                <Text
                   style={
                     orderActivity === "difficile"
-                      ? styles.btnPressed
-                      : styles.btn
+                      ? styles.textBtnPressed
+                      : styles.textBtn
                   }
-                  onPress={handleDifficile}
                 >
-                  <Text
-                    style={
-                      orderActivity === "difficile"
-                        ? styles.textBtnPressed
-                        : styles.textBtn
-                    }
-                  >
-                    Difficile
-                  </Text>
-                </TouchableHighlight>
-              </View>
+                  Difficile
+                </Text>
+              </TouchableHighlight>
             </View>
+            <Button title="Reset" onPress={handleReset} />
+          </View>
+          <ScrollView nestedScrollEnabled={true}>
             {loading && <ActivityIndicator />}
             <View>
               {activities &&
                 activities.map((activity) => (
-<<<<<<< HEAD
-                  <ActivityItem key={activity.id} item={activity} navigation={navigation} style={styles.itemActivity}/>
-=======
                   <ActivityItem
                     key={activity.id}
                     item={activity}
                     navigation={navigation}
+                    style={styles.itemActivity}
                   />
->>>>>>> 9d30554906c1a7a08f30d8c785066b5bc3117dbe
                 ))}
             </View>
-          </View>
-        </SafeAreaView>
-      </ScrollView>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+
       <Footer navigation={navigation} />
     </View>
   );
@@ -416,8 +538,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   itemActivity: {
-    width: 330
-  }
+    width: 330,
+  },
 });
 
 export default SearchScreen;
