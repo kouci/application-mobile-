@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -15,7 +14,7 @@ import supabase from "../../src/config/SupabaseClient.js";
 import ActivityItem from "../components/ActivityItem.js";
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
-import Carousel from "react-native-snap-carousel";
+
 
 function ActivitiesScreen({ navigation }) {
   const [activities, setActivities] = useState(null);
@@ -23,7 +22,7 @@ function ActivitiesScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [activitySelected, setActivitySelected] = useState("");
 
-  const data = ["Randonné", "vélo VTT", "la marche", "autre"];
+ 
 
 
 
@@ -47,9 +46,7 @@ function ActivitiesScreen({ navigation }) {
     }
   };
 
-  const handlePress = (name) => {
-    setActivitySelected(name);
-  };
+ 
 
   const renderItem = ({ item, index }) => (
     <TouchableHighlight
@@ -61,9 +58,9 @@ function ActivitiesScreen({ navigation }) {
         index === 0 ? { marginLeft: 25 } : { marginLeft: 15 },
        
       ]}
-      onPress={() => handlePress(item.name)}
+    
     >
-      <Text style={{ color: "#32749C", fontWeight: "bold", fontSize: 17 }}>
+      <Text style={{ color: "#32749C", fontWeight: "bold", fontSize: 19 }}>
         {item.name}
       </Text>
     </TouchableHighlight>
@@ -78,7 +75,7 @@ function ActivitiesScreen({ navigation }) {
       <Header navigation={navigation} />
       <View style={styles.underContainer}>
         <Text style={styles.title}>Vos activités en plein air</Text>
-        <View style={{ height: 120 }}>
+        <View style={{ height: 110 }}>
           <FlatList
             data={activities}
             renderItem={renderItem}
@@ -87,7 +84,7 @@ function ActivitiesScreen({ navigation }) {
           />
         </View>
 
-        {loading && <ActivityIndicator />}
+        {loading && <ActivityIndicator size={50} style={{marginTop: 100}}/>}
         <View >
           <FlatList showsVerticalScrollIndicator={false} style={{marginHorizontal: 10}} data={activities} renderItem={renderAct} />
         </View>

@@ -34,7 +34,7 @@ const SearchScreen = ({ navigation }) => {
   const [openAc, setOpenAc] = useState(false);
   const [activity, setActivity] = useState(false);
 
-  // donnée pour tester
+  // donnée pour afficher les type d'activities 
   const [items, setItems] = useState([
     { label: "Randonné", value: "Randonné" },
     { label: "Vélo VTT", value: "VTT" },
@@ -443,7 +443,7 @@ const SearchScreen = ({ navigation }) => {
           </View>
           <Button title="Réinitialiser la recherche" style={{borderRadius: 10}} onPress={handleReset} />
           <ScrollView nestedScrollEnabled={true}>
-            {loading && <ActivityIndicator />}
+            {loading && <ActivityIndicator size={50} style={{marginTop: 100}}/>}
             <View>
               {activities &&
                 activities.map((activity) => (
