@@ -241,6 +241,7 @@ const SearchScreen = ({ navigation }) => {
   const handleReset = () => {
     setDifficult(null);
     setDistance(0);
+    setDistanceValue(0)
     setHour(0);
     setActivity(false);
     setOrderActivity(null);
