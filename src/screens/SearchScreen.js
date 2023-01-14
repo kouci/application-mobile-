@@ -16,22 +16,20 @@ import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
 import DropDownPicker from "react-native-dropdown-picker";
 
-
 const SearchScreen = ({ navigation }) => {
-
   //states
   const [activities, setActivities] = useState(null);
   const [orderActivity, setOrderActivity] = useState("");
-  const [loading,setLoading] = useState(false);
- 
+  const [loading, setLoading] = useState(false);
+
   const [hourValue, setHourValue] = useState(0);
   const [distanceValue, setDistanceValue] = useState(0);
   const [hour, setHour] = useState(0);
   const [distance, setDistance] = useState(0);
 
   /* valeur local pour dropList activité et localisation open s'active quand la droplist s'ouvre/ */
-  const [openLo, setOpenLo] = useState(false)
-  const [localisation,setLocalisation] = useState(null);
+  const [openLo, setOpenLo] = useState(false);
+  const [localisation, setLocalisation] = useState(null);
   const [openAc, setOpenAc] = useState(false);
   const [activity, setActivity] = useState(false);
   // donnée pour tester
@@ -129,15 +127,16 @@ const SearchScreen = ({ navigation }) => {
     console.log("la valeu de heure" + hour);
   }, [hour]);
 
-
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
 
       <ScrollView nestedScrollEnabled={true}>
         <SafeAreaView horizontal={false}>
-          <View style={styles.container}>  
-          <View style={{ width: screenWidth - 30, zIndex: 5, marginBottom: 10 }}>
+          <View style={styles.container}>
+            <View
+              style={{ width: screenWidth - 30, zIndex: 5, marginBottom: 10 }}
+            >
               <DropDownPicker
                 open={openLo}
                 value={localisation}
@@ -149,22 +148,21 @@ const SearchScreen = ({ navigation }) => {
                 placeholder="Localisation"
               />
             </View>
-            {!openLo &&
-            <View style={{ width: screenWidth - 30, zIndex: 5  }}>
-            <DropDownPicker
-              open={openAc}
-              value={activity}
-              items={items}
-              searchable
-              setOpen={setOpenAc}
-              setValue={setActivity}
-              setItems={setItems}
-              placeholder="Activity"
-            />
-          </View>
-            }
-            
-     
+            {!openLo && (
+              <View style={{ width: screenWidth - 30, zIndex: 5 }}>
+                <DropDownPicker
+                  open={openAc}
+                  value={activity}
+                  items={items}
+                  searchable
+                  setOpen={setOpenAc}
+                  setValue={setActivity}
+                  setItems={setItems}
+                  placeholder="Activity"
+                />
+              </View>
+            )}
+
             <View
               style={{
                 position: "relative",
@@ -173,44 +171,54 @@ const SearchScreen = ({ navigation }) => {
                 width: screenWidth - 30,
               }}
             >
-              <Text>Durée:</Text>
-              <Slider
-                style={{ width: "80%", height: 50, marginLeft: 15 }}
-                step={1.0}
-                value={hourValue}
-                onValueChange={(value) => setHourValue(value)}
-                onSlidingComplete={(hourValue) => setHour(hourValue)}
-                minimumValue={0}
-                maximumValue={420}
-                minimumTrackTintColor="#32749C"
-                maximumTrackTintColor="#000000"
-              />
-              {hourValue !== 0 && hourValue >= 60 && (
-                <Text
+              {!openLo && !openAc && (
+                <View>
+                <View
                   style={{
-                    postion: "absolute",
-                    right: 60,
-                    top: -15,
-                    color: "gray",
+                    position: "relative",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    width: screenWidth - 30,
                   }}
                 >
-                  {Math.floor(hourValue / 60)} h {hourValue % 60}min
-                </Text>
-              )}
-              {hourValue !== 0 && hourValue < 60 && (
-                <Text
-                  style={{
-                    postion: "absolute",
-                    right: 60,
-                    top: -15,
-                    color: "gray",
-                  }}
-                >
-                  {hourValue % 60}min
-                </Text>
-              )}
-            </View>
-            <View
+                  <Text>Durée:</Text>
+                  <Slider
+                    style={{ width: "80%", height: 50, marginLeft: 15 }}
+                    step={1.0}
+                    value={hourValue}
+                    onValueChange={(value) => setHourValue(value)}
+                    onSlidingComplete={(hourValue) => setHour(hourValue)}
+                    minimumValue={0}
+                    maximumValue={420}
+                    minimumTrackTintColor="#32749C"
+                    maximumTrackTintColor="#000000"
+                  />
+                  {hourValue !== 0 && hourValue >= 60 && (
+                    <Text
+                      style={{
+                        postion: "absolute",
+                        right: 60,
+                        top: -15,
+                        color: "gray",
+                      }}
+                    >
+                      {Math.floor(hourValue / 60)} h {hourValue % 60}min
+                    </Text>
+                  )}
+                  {hourValue !== 0 && hourValue < 60 && (
+                    <Text
+                      style={{
+                        postion: "absolute",
+                        right: 60,
+                        top: -15,
+                        color: "gray",
+                      }}
+                    >
+                      {hourValue % 60}min
+                    </Text>
+                  )}
+                </View>
+                <View
               style={{
                 position: "relative",
                 flexDirection: "row",
@@ -245,6 +253,10 @@ const SearchScreen = ({ navigation }) => {
                 </Text>
               )}
             </View>
+                </View>
+              )}
+            </View>
+            
             <View style={styles.header}>
               <View>
                 <TouchableHighlight
@@ -310,7 +322,15 @@ const SearchScreen = ({ navigation }) => {
             <View>
               {activities &&
                 activities.map((activity) => (
+<<<<<<< HEAD
                   <ActivityItem key={activity.id} item={activity} navigation={navigation} style={styles.itemActivity}/>
+=======
+                  <ActivityItem
+                    key={activity.id}
+                    item={activity}
+                    navigation={navigation}
+                  />
+>>>>>>> 9d30554906c1a7a08f30d8c785066b5bc3117dbe
                 ))}
             </View>
           </View>
