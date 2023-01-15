@@ -120,15 +120,6 @@ const ActivityItem = ({ item, navigation }) => {
           <View style={styles.headerInfos}>
             <View style={styles.infos}>
               <Ionicons
-                styles={styles.icons}
-                size={25}
-                color="#EC7063"
-                name="location-outline"
-              ></Ionicons>
-              <Text style={styles.infosText}>Montpellier</Text>
-            </View>
-            <View style={styles.infos}>
-              <Ionicons
                 name="pulse-outline"
                 size={25}
                 color="#EC7063"
@@ -208,6 +199,7 @@ const styles = StyleSheet.create({
   },
   headerInfos: {
     marginLeft: 20,
+    marginTop: 15,
   },
 
   activityItem: {
