@@ -94,6 +94,7 @@ const ActivityScreen = ({ navigation }) => {
             <Text style={styles.text}>Distance</Text>
           </View>
           <Text style={styles.RigtText}> 15 Km </Text>
+
         </View>
         <View style={styles.rowContainer}>
           <View style={styles.containerText}>

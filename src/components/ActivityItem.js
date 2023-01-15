@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   StyleSheet,
@@ -7,9 +7,59 @@ import {
   View,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
+
+
 
 const ActivityItem = ({ item, navigation }) => {
   //navigation.navigate("ActivityPage", {id : item.id})
+
+  const [latitudeState, setLatitudeState] = useState(null);
+  const [longitudeState, setLongitudeState] = useState(null);
+
+const getLat = async () => {
+  try {
+    const savedLat = await AsyncStorage.getItem('latitude');
+    setLatitudeState(savedLat);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const getLong = async () => {
+  try {
+    const savedLong = await AsyncStorage.getItem('longitude');
+    setLongitudeState(savedLong);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+useEffect(() => {
+  getLat();
+  getLong();
+}, []);
+
+const calculDistance = () => {
+
+    var radlat1 = Math.PI * parseFloat(latitudeState)/180;
+		var radlat2 = Math.PI * item.localisation.lat/180;
+		var theta = parseFloat(longitudeState)-item.localisation.long;
+		var radtheta = Math.PI * theta/180;
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		if (dist > 1) {
+			dist = 1;
+		}
+		dist = Math.acos(dist);
+		dist = dist * 180/Math.PI;
+		dist = dist * 60 * 1.1515;
+		dist = dist * 1.609344;
+		return Math.trunc(dist);
+
+}
+
   return (
     <TouchableHighlight
       underlayColor="white"
@@ -25,7 +75,7 @@ const ActivityItem = ({ item, navigation }) => {
               borderRadius: 50,
               marginLeft: 15,
             }}
-            source={require("../../assets/rondo1.jpg")}
+            source={{uri: item.image}}
           />
           <View style={styles.headerInfos}>
             <View style={styles.infos}>
@@ -57,6 +107,8 @@ const ActivityItem = ({ item, navigation }) => {
           </View>
         </View>
         <Text style={styles.title}>{item.name}</Text>
+        <Text style={styles.title}>Distance : {calculDistance()} km</Text>
+        <Text>{/*`${getLoc()*/}`</Text>
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.desc}>
           {item.description}
         </Text>
