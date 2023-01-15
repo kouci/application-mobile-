@@ -24,6 +24,7 @@ import { useEffect } from "react";
 const ActivityScreen = ({ route, navigation }) => {
   const { width, height } = Dimensions.get("window");
   const item = route.params;
+  const distance = route.params;
   const [activity, setActivity] = useState(item);
   const [favorite, setFavorite] = useState(false);
 
@@ -124,7 +125,7 @@ const ActivityScreen = ({ route, navigation }) => {
                   borderRadius: 5,
                   elevation: 8,
                 }}
-                source={item.image}
+              source={{ uri: activity.item.image }}
               />
             </View>
           )}
@@ -188,7 +189,7 @@ const ActivityScreen = ({ route, navigation }) => {
 
             <Text style={styles.text}>Distance</Text>
           </View>
-          <Text style={styles.RigtText}> 15 Km </Text>
+          <Text style={styles.RigtText}> {distance.distance} km </Text>
 
         </View>
         <Text style={styles.textDescription}>Description</Text>
@@ -198,13 +199,13 @@ const ActivityScreen = ({ route, navigation }) => {
         <MapView
           style={{ height: 250, width: width - 20, marginTop: 10 }}
           initialRegion={{
-            latitude: 43.610769,
-            longitude: 3.876716,
+            latitude: activity.item.localisation.lat,
+            longitude: activity.item.localisation.long,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
         >
-          <Marker coordinate={{ latitude: 43.610769, longitude: 3.876716 }} />
+          <Marker coordinate={{ latitude: activity.item.localisation.lat, longitude: activity.item.localisation.long, }} />
         </MapView>
       </View>
       <Footer navigation={navigation} />

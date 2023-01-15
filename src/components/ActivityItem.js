@@ -104,6 +104,7 @@ const ActivityItem = ({ item, navigation }) => {
         onPress={() =>
           navigation.navigate("Activity", {
             item: item,
+            distance: calculDistance(),
           })
         }
         style={styles.activityItem}
