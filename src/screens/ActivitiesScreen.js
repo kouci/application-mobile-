@@ -14,9 +14,10 @@ import supabase from "../../src/config/SupabaseClient.js";
 import ActivityItem from "../components/ActivityItem.js";
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
+import Carousel from "react-native-snap-carousel";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-function ActivitiesScreen({ navigation }) {
+function ActivitiesScreen({ route, navigation }) {
   const [activities, setActivities] = useState(null);
   const [orderActivity, setOrderActivity] = useState("name");
   const [loading, setLoading] = useState(false);
@@ -24,8 +25,12 @@ function ActivitiesScreen({ navigation }) {
 
  
 
-
-
+  if (route.params){
+    // ajouter filtre
+  const sliderValue = route.params.name;
+  console.log(sliderValue);
+  }
+  
   const renderAct = ({ item }) => <ActivityItem item={item} navigation={navigation} />;
 
   const getActivities = async () => {

@@ -189,6 +189,7 @@ const ActivityScreen = ({ route, navigation }) => {
             <Text style={styles.text}>Distance</Text>
           </View>
           <Text style={styles.RigtText}> 15 Km </Text>
+
         </View>
         <Text style={styles.textDescription}>Description</Text>
         <Text style={{ textAlign: "center", marginHorizontal: 10 }}>
