@@ -28,10 +28,6 @@ const ActivityScreen = ({ route, navigation }) => {
   const [activity, setActivity] = useState(item);
   const [favorite, setFavorite] = useState(false);
 
-  const data = [
-    { id: "1", image: require("../../assets/rondo1.jpg") },
-    { id: "2", image: require("../../assets/rondonnée2.jpg") },
-  ];
 
   const getDifficulte = () => {
     if (activity.item.difficulte === 0) {
@@ -110,12 +106,6 @@ const ActivityScreen = ({ route, navigation }) => {
     <View style={[styles.container, { height: height }]}>
       <Header navigation={navigation} />
       <View style={{ height: height / 4, marginEnd: 10 }}>
-        <FlatList
-          data={data}
-          keyExtractor={(item) => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
             <View>
               <Image
                 style={{
@@ -128,8 +118,6 @@ const ActivityScreen = ({ route, navigation }) => {
               source={{ uri: activity.item.image }}
               />
             </View>
-          )}
-        />
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Text style={{ fontSize: 15, color: "#2E4053", fontWeight: "bold" }}>
