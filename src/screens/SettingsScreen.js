@@ -22,7 +22,7 @@ const SettingsScreen = ({ navigation }) => {
          <View style={styles.content}>
          <Text>Paramètres</Text>
          <Text>Choisir la distance des activités</Text>
-         <Text>{range} km</Text>
+         <Text>{Math.trunc(range)} km</Text>
          <Slider
          style = {{width:250, height:50}}
          thumbTintColor='blue'
