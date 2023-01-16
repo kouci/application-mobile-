@@ -54,6 +54,8 @@ const CreationProfilScreen = ({ navigation }) => {
       });
       if(!error){
         setSuccessMesssage('Le compte à été crée avec succes')
+        navigation.navigate("Profil");
+
       }
       
     }
